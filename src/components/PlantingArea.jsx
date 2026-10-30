@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import FlowerFrame from './FlowerFrame.jsx'
+import FlowerGrowth from './FlowerGrowth.jsx'
+import { STAGE_DURATIONS } from '../data/growth.js'
 
 const stages = ['Stem', 'Leaves', 'Buds', 'Opening', 'Flowers']
 const loadedSheets = new Map()
@@ -41,7 +42,7 @@ export default function PlantingArea({ flower, onBloom, onRead, active }) {
 
   useEffect(() => {
     if (stage < 0 || stage === 4) return
-    const timer = setTimeout(() => setStage(current => current + 1), reducedMotion ? 180 : 2800)
+    const timer = setTimeout(() => setStage(current => current + 1), reducedMotion ? 180 : STAGE_DURATIONS[stage])
     return () => clearTimeout(timer)
   }, [stage, reducedMotion])
 
@@ -71,16 +72,12 @@ export default function PlantingArea({ flower, onBloom, onRead, active }) {
         <span className="plant-art" aria-hidden="true">
           {stage < 0 ? <span className="plant-marker">+</span> : (
             <span className="flower-sway">
-              {flower.frames.map((_, index) => (
-                <span key={index} className={`flower-layer${stage === index ? ' flower-layer--visible' : ''}`}>
-                  <FlowerFrame flower={flower} index={index} />
-                </span>
-              ))}
+              <FlowerGrowth flower={flower} />
             </span>
           )}
         </span>
         <span className="plant-label">{flower.name}</span>
-        <span className="plant-hint">{failed ? 'Try again' : !ready ? 'Preparing…' : stage < 0 ? 'Plant a story' : growing ? 'Growing…' : 'Read the story ↓'}</span>
+        <span className="plant-hint">{failed ? 'Try again' : !ready ? 'Preparing…' : stage < 0 ? 'Plant a story' : growing ? 'Growing…' : 'Read the story'}</span>
       </button>
       <span className="sr-only" role="status">{stage < 0 ? '' : `${flower.name}: ${stages[stage]}${stage === 4 ? '. Ready to read.' : '.'}`}</span>
     </section>

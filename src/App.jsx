@@ -4,12 +4,12 @@ import gardenImage from './background.png'
 import { flowers } from './data/flowers.js'
 import PlantingArea from './components/PlantingArea.jsx'
 import FlowerReading from './components/FlowerReading.jsx'
+import FitToSpace from './components/FitToSpace.jsx'
 
 export default function App() {
   const [entered, setEntered] = useState(false)
   const [selectedFlower, setSelectedFlower] = useState(null)
   const gardenScene = useRef(null)
-  const readingSpace = useRef(null)
   const activeFlower = flowers.find(flower => flower.id === selectedFlower)
 
   function handleBloom(id) {
@@ -18,12 +18,6 @@ export default function App() {
 
   function handleRead(id) {
     setSelectedFlower(id)
-    requestAnimationFrame(() => {
-      readingSpace.current?.scrollIntoView({
-        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
-        block: 'start',
-      })
-    })
   }
 
   useEffect(() => {
@@ -46,8 +40,10 @@ export default function App() {
             <PlantingArea key={flower.id} flower={flower} active={flower.id === selectedFlower} onBloom={handleBloom} onRead={handleRead} />
           ))}
         </div>
-        <div className="reading-space" ref={readingSpace} aria-live="polite" aria-atomic="true">
-          {activeFlower && <FlowerReading key={activeFlower.id} flower={activeFlower} />}
+        <div className="reading-space" aria-live="polite" aria-atomic="true">
+          <FitToSpace>
+            {activeFlower && <FlowerReading key={activeFlower.id} flower={activeFlower} />}
+          </FitToSpace>
         </div>
       </section>
       <section

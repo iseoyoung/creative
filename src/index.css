@@ -134,19 +134,51 @@ button:focus-visible { outline: 2px solid currentColor; outline-offset: 8px; }
   width: 100%;
   transform-origin: 50% 95%;
 }
-.flower-layer {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: end;
-  justify-content: center;
-  opacity: 0;
-  transform: scale(.97);
-  transform-origin: bottom center;
-  transition: opacity 1.5s ease, transform 2.4s ease;
+.flower-frame { display: block; width: 100%; height: 100%; overflow: visible; }
+/* Trace the source stem from its root, then unfold each organ at its joint. */
+.growing-stem {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  animation: extend-stem var(--duration) cubic-bezier(.35, 0, .25, 1) var(--delay) both;
 }
-.flower-layer--visible { opacity: 1; transform: scale(1); }
-.flower-frame { display: block; width: 100%; height: 100%; overflow: hidden; }
+@keyframes extend-stem { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+.growing-leaf {
+  transform-box: view-box;
+  animation: unfold-leaf var(--duration) cubic-bezier(.2, .65, .3, 1) var(--delay) both;
+}
+@keyframes unfold-leaf {
+  0% { opacity: 0; transform: rotate(var(--unfold)) scale(.03, .08); }
+  12% { opacity: 1; }
+  65% { transform: rotate(calc(var(--unfold) * -.12)) scale(.82, .95); }
+  100% { opacity: 1; transform: rotate(0deg) scale(1); }
+}
+.growing-bud {
+  transform-box: view-box;
+  animation: form-bud var(--duration) ease-in-out var(--delay) both;
+}
+@keyframes form-bud {
+  0% { opacity: 0; transform: scale(.1, .2); }
+  25% { opacity: 1; transform: scale(.65, .8); }
+  55% { opacity: 1; transform: scale(.95, 1); }
+  100% { opacity: 0; transform: scale(1); }
+}
+.growing-bloom {
+  transform-box: view-box;
+  animation: open-bloom var(--duration) cubic-bezier(.2, .55, .25, 1) var(--delay) both;
+}
+@keyframes open-bloom {
+  0% { opacity: 0; transform: scale(.08, .18); }
+  18% { opacity: 1; }
+  60% { transform: scale(.6, .85); }
+  100% { opacity: 1; transform: scale(1); }
+}
+/* The last fraction restores every original watercolor edge without a frame swap. */
+.grown-plant { animation: settle-growth var(--growth-duration) linear both; }
+@keyframes settle-growth { 0%, 96% { opacity: 0; } 100% { opacity: 1; } }
+.growing-skeleton { animation: settle-stems var(--growth-duration) linear both; }
+@keyframes settle-stems { 0%, 96% { opacity: 1; } 100% { opacity: 0; } }
+.planting-area--bloomed .flower-growth > g:not(.grown-plant) { visibility: hidden; }
+.planting-area--bloomed .grown-plant { animation: none; opacity: 1; }
 .planting-area--bloomed .flower-sway { animation: flower-sway 7s ease-in-out 1.5s infinite; }
 .planting-area:nth-child(2) .flower-sway { animation-duration: 8s; }
 .planting-area:nth-child(3) .flower-sway { animation-duration: 9s; }
@@ -210,4 +242,74 @@ cite span { font-style: italic; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; }
+  .flower-growth > g:not(.grown-plant) { visibility: hidden; }
+  .grown-plant { opacity: 1; }
+}
+
+/* The reading and all three plants share one viewport, with no page scrolling. */
+html, body, #root { height: 100%; overflow: hidden; }
+.experience { height: 100svh; min-height: 0; overflow: hidden; }
+.garden {
+  display: grid;
+  grid-template-rows: minmax(0, 48fr) minmax(0, 52fr);
+  height: 100%;
+  min-height: 0;
+  padding: 1rem clamp(1rem, 5vw, 5rem) 1rem;
+  background-size: cover;
+  background-position: center;
+  background-attachment: scroll;
+}
+.planting-areas {
+  grid-row: 2;
+  height: 100%;
+  min-height: 0;
+  padding-top: 0;
+  padding-bottom: 4svh;
+  align-items: end;
+}
+.plant-art { height: min(36svh, 23rem); }
+.plant-label { font-size: clamp(1.1rem, 2.3vw, 1.6rem); padding-top: .3rem; }
+.plant-hint { min-height: 1.2rem; font-size: clamp(.7rem, 1.1vw, .9rem); }
+.reading-space {
+  grid-row: 1;
+  width: min(100%, 45rem);
+  height: 100%;
+  min-height: 0;
+  margin: 0 auto;
+}
+.reading-fit { display: flex; align-items: center; justify-content: center; height: 100%; min-height: 0; }
+.reading-fit__content { width: 100%; flex: none; transform-origin: center; }
+.flower-reading { padding: .5rem 1rem; }
+.flower-reading__name { height: 3rem; margin-bottom: .5rem; }
+.flower-reading__name img { width: min(100%, 12rem); }
+.moment-picker { margin: .3rem 0 .6rem; gap: 1rem; }
+.moment-picker button { font-size: .9rem; padding: .25rem .1rem; }
+.quotation { font-size: clamp(1.2rem, 2.2vw, 1.7rem); line-height: 1.25; }
+.quotation__hint { margin-top: .4rem; font-size: .75rem; }
+cite { margin-top: .5rem; font-size: .85rem; }
+.reading-context { margin-top: .9rem; }
+.reading-context h3 { margin-bottom: .3rem; font-size: .7rem; }
+.reading-context p { font-size: 1.05rem; line-height: 1.45; }
+.title-screen { min-height: 0; }
+@media (max-width: 600px) {
+  .garden { grid-template-rows: minmax(0, 60fr) minmax(0, 40fr); padding: .5rem .8rem; }
+  .plant-art { height: 26svh; }
+  .planting-areas { padding-bottom: 2.5svh; gap: .8rem; }
+  .flower-reading { padding: .25rem .5rem; }
+  .flower-reading__name { height: 2.5rem; }
+  .reading-context p { font-size: 1rem; }
+  .quotation { font-size: 1.4rem; }
+  .moment-picker { gap: .8rem; }
+  .moment-picker button { font-size: .85rem; }
+}
+@media (max-height: 500px) and (min-width: 601px) {
+  .garden { grid-template-rows: minmax(0, 50fr) minmax(0, 50fr); padding-block: .25rem; }
+  .plant-art { height: 32svh; }
+  .planting-areas { padding-bottom: 0; }
+  .plant-label { font-size: 1rem; }
+  .plant-hint { font-size: .7rem; }
+  .title-screen { padding: .5rem; }
+  .title-screen h1 { font-size: 4rem; margin: .5rem 0; }
+  .title-screen__description { margin-top: .75rem; }
+  .enter-button { margin-top: 1rem; }
 }

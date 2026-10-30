@@ -4,9 +4,9 @@ A Vite + React literary garden using the supplied watercolor artwork and locally
 
 ## Current interaction
 
-Enter the garden, then choose Lilac, Carnations, or Roses. Each plant grows independently through the five supplied illustrations over about 12 seconds. Bloomed flowers remain in place and sway gently. Select a bloom to read its illustrated name, quotation, and context, revealed in sequence. Carnations and Roses each have two selectable passages.
+Enter the garden, then choose Lilac, Carnations, or Roses. Each plant grows independently over about 16 seconds: a continuous stem extends from the root, leaves unfold at their attachment points, buds form, and flower clusters open. The supplied mature artwork stays aligned throughout; the animation no longer crossfades between whole plant frames. Bloomed flowers remain in place and sway gently. Select a bloom to read its illustrated name, quotation, and context, revealed in sequence. Carnations and Roses each have two selectable passages.
 
-Reduced-motion preferences disable fades and swaying and shorten the growth sequence. Planting and passage controls support keyboard use.
+The reading panel and three planting areas fit a single viewport without vertical page scrolling. Long passages and expanded quotations scale to the available space, including on short mobile screens. Reduced-motion preferences disable fades and swaying and shorten the growth sequence. Planting and passage controls support keyboard use.
 
 The five literary moments come from the user-supplied `Mrs_Dalloway_5_Moments_Quotation_Context_Question.txt`. Context and questions are editorial text, distinct from Woolf's quotations. The two rose sentences can be expanded. Full sentences for Lilac and both Carnations passages await the referenced University of Virginia PDF; excerpts are displayed without inventing missing text. Content is maintained in `src/data/flowers.js`.
 
@@ -40,9 +40,11 @@ The production output is generated in `dist/` (ignored by Git).
 - `src/main.jsx`: React bootstrap
 - `src/App.jsx`: title transition and garden selection
 - `src/components/PlantingArea.jsx`: independent growth, asset loading, and motion preferences
-- `src/components/FlowerFrame.jsx`: non-destructive sheet viewports and clipping
+- `src/components/FlowerGrowth.jsx`: continuous branch drawing, leaf unfolding, buds, and bloom growth
 - `src/components/FlowerReading.jsx`: sequential reading and sentence expansion
 - `src/data/flowers.js`: artwork coordinates and five literary moments
+- `src/data/growth.js`: organ attachment points and growth timing
+- `src/data/organPaths.js`: precomputed leaf and petal clipping outlines
 - `src/index.css`: layout, typography, growth fades, and sway
 - `vite.config.js`: Vite React integration
 
