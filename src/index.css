@@ -462,7 +462,7 @@ cite { margin-top: .5rem; font-size: .85rem; }
   30% { transform: translate3d(calc(var(--drift) * -.35), calc(var(--landing) * .28), 0) rotate(calc(var(--turn) * .3)); }
   65% { opacity: .9; transform: translate3d(calc(var(--drift) * .7), calc(var(--landing) * .65), 0) rotate(calc(var(--turn) * .7)); }
   98% { opacity: .8; }
-  100% { opacity: 0; transform: translate3d(var(--drift), var(--landing), 0) rotate(var(--turn)); }
+  100% { opacity: .95; transform: translate3d(var(--drift), var(--landing), 0) rotate(var(--turn)); }
 }
 
 .quotation-flower { color: inherit; padding: .02em .14em; border-radius: .12em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
@@ -475,3 +475,12 @@ cite { margin-top: .5rem; font-size: .85rem; }
 .garden { grid-template-rows: minmax(0, 47fr) minmax(0, 53fr); }
 @media (max-width: 600px) { .garden { grid-template-rows: minmax(0, 58fr) minmax(0, 42fr); } }
 @media (max-height: 500px) and (min-width: 601px) { .garden { grid-template-rows: minmax(0, 60fr) minmax(0, 40fr); } }
+
+.falling-petal--landed {
+  animation: none;
+  top: 0;
+  bottom: auto;
+  opacity: .95;
+  transform: translate3d(var(--drift), calc(var(--landing) - var(--pile-lift)), 0) rotate(var(--turn));
+}
+.falling-petal--landed:hover, .falling-petal--landed:focus-visible { z-index: 2; filter: drop-shadow(0 1px 4px rgb(85 53 56 / 30%)); }

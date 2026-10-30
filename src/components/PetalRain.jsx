@@ -26,16 +26,16 @@ function PetalAnswer({ petal, onClose }) {
   )
 }
 
-function Petal({ petal, onLand, onRead }) {
+function Petal({ petal, onLand, onRead, pileIndex }) {
   useEffect(() => {
-    // Animation completion handles normal landings; this also cleans up when
-    // reduced motion is enabled or a browser suspends an animation.
+    if (petal.landed) return
+    // Keep the petal on the ground after its animation or reduced-motion delay.
     const cleanup = setTimeout(() => onLand(petal.id), petal.lifetime)
     return () => clearTimeout(cleanup)
-  }, [petal.id, petal.lifetime, onLand])
+  }, [petal.id, petal.lifetime, petal.landed, onLand])
 
   return (
-    <button className={`falling-petal falling-petal--${petal.response.moment.split(':')[0]}`} aria-label="Read a falling thought" onClick={() => onRead(petal)} onAnimationEnd={event => { if (event.target === event.currentTarget) onLand(petal.id) }} style={{ left: `calc((100% - 2.75rem) * ${petal.left})`, animationDelay: `${petal.delay}ms`, '--drift': `${petal.drift}px`, '--fall-time': `${petal.duration}ms`, '--turn': `${petal.turn}deg` }}>
+    <button className={`falling-petal falling-petal--${petal.response.moment.split(':')[0]}${petal.landed ? ' falling-petal--landed' : ''}`} aria-label={petal.landed ? 'Read a thought on the ground' : 'Read a falling thought'} onClick={() => onRead(petal)} onAnimationEnd={event => { if (event.target === event.currentTarget) onLand(petal.id) }} style={{ left: `calc((100% - 2.75rem) * ${petal.left})`, animationDelay: `${petal.delay}ms`, '--drift': `${petal.drift}px`, '--fall-time': `${petal.duration}ms`, '--turn': `${petal.turn}deg`, '--pile-lift': `${Math.min(7, Math.floor(pileIndex / 5)) * 3}px` }}>
       <svg viewBox="0 0 48 48" aria-hidden="true">
         <path className="petal-shape" d="M8 5C25 0 46 11 39 29C35 39 24 45 19 44C16 34 3 22 8 5Z" />
         <path className="petal-vein" d="M12 10Q29 23 21 39M15 15Q29 17 34 23" fill="none" strokeWidth=".8" />
@@ -127,7 +127,7 @@ export default function PetalRain({ enabled }) {
     }
     function replay() {
       if (controller.signal.aborted || document.hidden || reducedMotion.current) return
-      // Exactly one petal per saved answer in a cycle, across all three flowers.
+      // Existing falling or landed answers are deduplicated by the reducer.
       for (const saved of cache.current.values()) {
         release(saved.response, saved.mode, saved.question, Math.round(Math.random() * 8000))
       }
@@ -146,8 +146,8 @@ export default function PetalRain({ enabled }) {
           const zone = zones[flower.id]
           if (!zone) return null
           return (
-            <div className="petal-zone" key={flower.id} data-petal-zone={flower.id} aria-label={`${flower.name} thoughts`} style={{ left: zone.left, width: zone.width, height: zone.height, '--landing': `${Math.max(0, zone.height - 44)}px` }}>
-              {petals.active.filter(petal => petal.response.moment.startsWith(`${flower.id}:`)).map(petal => <Petal key={petal.id} petal={petal} onLand={remove} onRead={setSelected} />)}
+            <div className="petal-zone" key={flower.id} data-petal-zone={flower.id} aria-label={`${flower.name} thoughts`} style={{ left: zone.left, width: zone.width, height: zone.height, '--landing': `${Math.max(0, zone.height - 56)}px` }}>
+              {petals.active.filter(petal => petal.response.moment.startsWith(`${flower.id}:`)).map((petal, index) => <Petal key={petal.id} petal={petal} onLand={remove} onRead={setSelected} pileIndex={index} />)}
             </div>
           )
         })}
