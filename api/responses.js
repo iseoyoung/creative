@@ -48,10 +48,12 @@ export function createResponseHandler({ getStore = configuredStore, now = () => 
     }
     const offset = Number(url.searchParams.get('offset') ?? 0)
     if (!Number.isInteger(offset) || offset < 0 || offset > 200) return json(res, 400, { error: 'Invalid page.' })
+    const limit = Number(url.searchParams.get('limit') ?? RESPONSE_PAGE_SIZE)
+    if (!Number.isInteger(limit) || limit < 1 || limit > 200) return json(res, 400, { error: 'Invalid page size.' })
     try {
       const store = getStore()
       if (!store) return json(res, 503, { code: 'STORAGE_NOT_CONFIGURED', error: 'Shared responses are not connected yet.' })
-      if (req.method === 'GET') return json(res, 200, { ...await store.list(moment, offset, RESPONSE_PAGE_SIZE), mode: 'shared' })
+      if (req.method === 'GET') return json(res, 200, { ...await store.list(moment, offset, limit), mode: 'shared' })
       const response = { id: makeId(), moment, answer: normalizeAnswer(body.answer), createdAt: now().toISOString() }
       // Keep raw IP addresses out of stored responses and rate-limit keys.
       const ip = String(req.headers['x-vercel-forwarded-for'] || req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown').split(',')[0].trim()

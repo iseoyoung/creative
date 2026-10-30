@@ -55,6 +55,7 @@ test('invalid answers, passage identifiers, request bodies, and origins never re
   assert.equal((await call(handler, { method: 'POST', body: {}, headers: { 'content-type': 'text/plain' } })).status, 415)
   assert.equal((await call(handler, { method: 'POST', body: { moment: 'lilac:comfort', answer: 'Hello' }, headers: { origin: 'https://elsewhere.test' } })).status, 403)
   assert.equal((await call(handler, { url: '/api/responses?moment=lilac:comfort&offset=-1' })).status, 400)
+  assert.equal((await call(handler, { url: '/api/responses?moment=lilac:comfort&limit=201' })).status, 400)
   assert.equal(rows.length, 0)
 })
 
@@ -77,6 +78,9 @@ test('pagination returns the next page without repeating the first page', async 
   assert.equal(second.responses.length, 3)
   assert.equal(second.nextOffset, null)
   assert.ok(!first.responses.some(a => second.responses.some(b => a.id === b.id)))
+  const all = (await call(handler, { url: '/api/responses?moment=lilac:comfort&limit=200' })).body
+  assert.equal(all.responses.length, 15)
+  assert.equal(all.nextOffset, null)
 })
 
 test('unconfigured storage is distinct from a failed upstream operation', async () => {

@@ -32,11 +32,11 @@ async function request(url, options = {}) {
   return body
 }
 
-export async function listResponses(moment, offset = 0, signal) {
-  const shared = await request(`/api/responses?moment=${encodeURIComponent(moment)}&offset=${offset}`, { signal })
+export async function listResponses(moment, offset = 0, signal, limit = RESPONSE_PAGE_SIZE) {
+  const shared = await request(`/api/responses?moment=${encodeURIComponent(moment)}&offset=${offset}&limit=${limit}`, { signal })
   if (shared) return shared
   const responses = deviceResponses(moment)
-  return { mode: 'device', responses: responses.slice(offset, offset + RESPONSE_PAGE_SIZE), total: responses.length, nextOffset: offset + RESPONSE_PAGE_SIZE < responses.length ? offset + RESPONSE_PAGE_SIZE : null }
+  return { mode: 'device', responses: responses.slice(offset, offset + limit), total: responses.length, nextOffset: offset + limit < responses.length ? offset + limit : null }
 }
 
 export async function sendResponse(moment, answer) {

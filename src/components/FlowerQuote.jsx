@@ -1,13 +1,24 @@
-const flowerNames = /^(lilacs?|carnations?|roses?)$/i
-const namesInSentence = /(\b(?:lilacs?|carnations?|roses?)\b)/gi
+import { useId, useState } from 'react'
 
-export default function FlowerQuote({ sentence }) {
+const names = {
+  lilac: /(\blilacs?\b)/gi,
+  carnations: /(\bcarnations?\b)/gi,
+  roses: /(\broses?\b)/gi,
+}
+
+export default function FlowerQuote({ sentence, excerpt, flowerId }) {
+  const [expanded, setExpanded] = useState(false)
+  const textId = useId()
+  const text = expanded ? sentence : excerpt
+  const expression = names[flowerId]
+  const parts = text.split(expression)
+
   return (
-    <p className="quotation">“{sentence.split(namesInSentence).map((part, index) => {
-      if (!flowerNames.test(part)) return part
-      const name = part.toLowerCase()
-      const kind = name.startsWith('lilac') ? 'lilac' : name.startsWith('carnation') ? 'carnations' : 'roses'
-      return <span className={`quotation-flower quotation-flower--${kind}`} key={index}>{part}</span>
-    })}”</p>
+    <button className="quotation" aria-expanded={expanded} aria-controls={textId} onClick={() => setExpanded(value => !value)}>
+      <span id={textId}>“{parts.map((part, index) => index % 2
+        ? <span className={`quotation-flower quotation-flower--${flowerId}`} key={index}>{part}</span>
+        : part)}”</span>
+      <span className="quotation__hint">{expanded ? 'Close full sentence −' : 'Read full sentence +'}</span>
+    </button>
   )
 }

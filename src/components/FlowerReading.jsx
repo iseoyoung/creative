@@ -3,14 +3,11 @@ import Reflection from './Reflection.jsx'
 import FitToSpace from './FitToSpace.jsx'
 import FlowerQuote from './FlowerQuote.jsx'
 
-export default function FlowerReading({ flower, onMomentChange }) {
+export default function FlowerReading({ flower }) {
   const [momentIndex, setMomentIndex] = useState(0)
   const [reveal, setReveal] = useState(0)
   const moment = flower.moments[momentIndex]
 
-  useEffect(() => {
-    onMomentChange({ key: `${flower.id}:${moment.id}`, question: moment.question })
-  }, [flower.id, moment.id, moment.question, onMomentChange])
 
   useEffect(() => {
     const timers = [setTimeout(() => setReveal(1), 900), setTimeout(() => setReveal(2), 1900), setTimeout(() => setReveal(3), 2900)]
@@ -40,7 +37,7 @@ export default function FlowerReading({ flower, onMomentChange }) {
           <div key={moment.id} className="reading-passage">
             <div className={`reading-reveal${reveal >= 1 ? ' reading-reveal--visible' : ''}`} aria-hidden={reveal < 1}>
               <blockquote>
-                <FlowerQuote sentence={moment.sentence} />
+                <FlowerQuote key={moment.id} sentence={moment.sentence} excerpt={moment.excerpt} flowerId={flower.id} />
                 <cite>Virginia Woolf · <span>Mrs. Dalloway</span></cite>
               </blockquote>
             </div>

@@ -1,18 +1,14 @@
 export const initialPetals = { active: [], waiting: [] }
 
-// Submitted thoughts wait their turn instead of making an existing petal vanish.
 export function petalReducer(state, action) {
   if (action.type === 'release') {
-    return state.active.length < 4
-      ? { ...state, active: [...state.active, action.petal] }
-      : { ...state, waiting: [...state.waiting, action.petal] }
+    const incoming = action.petal
+    const duplicate = state.active.some(petal => petal.mode === incoming.mode && petal.response.id === incoming.response.id)
+    return duplicate ? state : { ...state, active: [...state.active, incoming] }
   }
   if (action.type === 'land') {
     if (!state.active.some(petal => petal.id === action.id)) return state
-    const active = state.active.filter(petal => petal.id !== action.id)
-    return state.waiting.length
-      ? { active: [...active, state.waiting[0]], waiting: state.waiting.slice(1) }
-      : { ...state, active }
+    return { ...state, active: state.active.filter(petal => petal.id !== action.id) }
   }
   return state
 }

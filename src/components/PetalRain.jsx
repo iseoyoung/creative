@@ -1,7 +1,9 @@
-import { useCallback, useEffect, useReducer, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useReducer, useRef, useState } from 'react'
 import { listResponses } from '../data/responses.js'
 import FitToSpace from './FitToSpace.jsx'
 import { initialPetals, petalReducer } from '../data/petals.js'
+import { flowers } from '../data/flowers.js'
+import { MAX_RESPONSES } from '../../shared/responses.js'
 
 function PetalAnswer({ petal, onClose }) {
   const dialog = useRef(null)
@@ -33,7 +35,7 @@ function Petal({ petal, onLand, onRead }) {
   }, [petal.id, petal.lifetime, onLand])
 
   return (
-    <button className={`falling-petal falling-petal--${petal.response.moment.split(':')[0]}`} aria-label="Read a falling thought" onClick={() => onRead(petal)} onAnimationEnd={event => { if (event.target === event.currentTarget) onLand(petal.id) }} style={{ left: `${petal.left}%`, '--drift': `${petal.drift}px`, '--fall-time': `${petal.duration}ms`, '--turn': `${petal.turn}deg` }}>
+    <button className={`falling-petal falling-petal--${petal.response.moment.split(':')[0]}`} aria-label="Read a falling thought" onClick={() => onRead(petal)} onAnimationEnd={event => { if (event.target === event.currentTarget) onLand(petal.id) }} style={{ left: `calc((100% - 2.75rem) * ${petal.left})`, animationDelay: `${petal.delay}ms`, '--drift': `${petal.drift}px`, '--fall-time': `${petal.duration}ms`, '--turn': `${petal.turn}deg` }}>
       <svg viewBox="0 0 48 48" aria-hidden="true">
         <path className="petal-shape" d="M8 5C25 0 46 11 39 29C35 39 24 45 19 44C16 34 3 22 8 5Z" />
         <path className="petal-vein" d="M12 10Q29 23 21 39M15 15Q29 17 34 23" fill="none" strokeWidth=".8" />
@@ -42,10 +44,11 @@ function Petal({ petal, onLand, onRead }) {
   )
 }
 
-export default function PetalRain({ moment, question, enabled }) {
+export default function PetalRain({ enabled }) {
   const [petals, dispatch] = useReducer(petalReducer, initialPetals)
   const [selected, setSelected] = useState(null)
-  const cache = useRef({ responses: [], mode: null, question: '' })
+  const cache = useRef(new Map())
+  const [zones, setZones] = useState({})
   const reducedMotion = useRef(false)
   const counter = useRef(0)
   const active = useRef(enabled)
@@ -53,16 +56,35 @@ export default function PetalRain({ moment, question, enabled }) {
 
   const remove = useCallback(id => dispatch({ type: 'land', id }), [])
 
-  const release = useCallback((response, mode, prompt) => {
+  const release = useCallback((response, mode, prompt, delay = 0) => {
     if (!active.current) return
     const duration = 22000 + Math.round(Math.random() * 8000)
     const petal = {
       id: ++counter.current, response, mode, question: prompt,
-      left: 8 + Math.random() * 84, drift: (Math.random() - .5) * 100,
+      left: .3 + Math.random() * .4, drift: (Math.random() - .5) * 14, delay,
       turn: 70 + Math.random() * 170, duration,
-      lifetime: reducedMotion.current ? 10000 : duration + 500,
+      lifetime: reducedMotion.current ? 10000 : delay + duration + 500,
     }
     dispatch({ type: 'release', petal })
+  }, [])
+
+  useLayoutEffect(() => {
+    function measure() {
+      const next = {}
+      for (const flower of flowers) {
+        const area = document.querySelector(`[data-flower="${flower.id}"]`)
+        const art = area?.querySelector('.plant-art')
+        if (!area || !art) continue
+        const rect = area.getBoundingClientRect()
+        next[flower.id] = { left: rect.left, width: rect.width, height: art.getBoundingClientRect().bottom }
+      }
+      setZones(next)
+    }
+    const observer = new ResizeObserver(measure)
+    document.querySelectorAll('.garden, .planting-area').forEach(element => observer.observe(element))
+    window.addEventListener('resize', measure)
+    measure()
+    return () => { observer.disconnect(); window.removeEventListener('resize', measure) }
   }, [])
 
   useEffect(() => {
@@ -71,48 +93,64 @@ export default function PetalRain({ moment, question, enabled }) {
     update()
     media.addEventListener('change', update)
     function submitted(event) {
-      const { response, mode, question: prompt } = event.detail
-      release(response, mode, prompt)
-      if (response.moment === moment) {
-        cache.current.responses = [response, ...cache.current.responses.filter(item => item.id !== response.id)]
-        cache.current.mode = mode
-      }
+      const { response, mode, question } = event.detail
+      cache.current.set(`${mode}:${response.id}`, { response, mode, question })
+      release(response, mode, question)
     }
     window.addEventListener('garden:response-sent', submitted)
     return () => {
       media.removeEventListener('change', update)
       window.removeEventListener('garden:response-sent', submitted)
     }
-  }, [moment, release])
+  }, [release])
 
   useEffect(() => {
-    cache.current = { responses: [], mode: null, question }
-    if (!enabled || !moment) return
+    if (!enabled) return
     const controller = new AbortController()
     async function refresh() {
-      try {
-        const result = await listResponses(moment, 0, controller.signal)
-        if (!controller.signal.aborted) cache.current = { responses: result.responses, mode: result.mode, question }
-      } catch { /* Keep existing petals and retry on the next scheduled refresh. */ }
+      await Promise.allSettled(flowers.flatMap(flower => flower.moments.map(async moment => {
+        const key = `${flower.id}:${moment.id}`
+        const previous = new Set([...cache.current].filter(([, saved]) => saved.response.moment === key).map(([id]) => id))
+        const collected = new Map()
+        let offset = 0
+        do {
+          const page = await listResponses(key, offset, controller.signal, MAX_RESPONSES)
+          if (controller.signal.aborted) return
+          for (const response of page.responses) collected.set(`${page.mode}:${response.id}`, { response, mode: page.mode, question: moment.question })
+          offset = page.nextOffset
+        } while (offset !== null)
+        if (controller.signal.aborted) return
+        // Merge, rather than erase a thought sent while this refresh was in flight.
+        for (const id of previous) if (!collected.has(id)) cache.current.delete(id)
+        for (const [id, saved] of collected) cache.current.set(id, saved)
+      })))
     }
     function replay() {
-      if (document.hidden || reducedMotion.current) return
-      const saved = cache.current
-      if (!saved.responses.length) return
-      const response = saved.responses[Math.floor(Math.random() * saved.responses.length)]
-      release(response, saved.mode, saved.question)
+      if (controller.signal.aborted || document.hidden || reducedMotion.current) return
+      // Exactly one petal per saved answer in a cycle, across all three flowers.
+      for (const saved of cache.current.values()) {
+        release(saved.response, saved.mode, saved.question, Math.round(Math.random() * 8000))
+      }
     }
-    refresh()
-    const first = setTimeout(replay, 4000)
-    const repeat = setInterval(replay, 11000)
+    let first
+    refresh().then(() => { if (!controller.signal.aborted) first = setTimeout(replay, 4000) })
+    const repeat = setInterval(replay, 40000)
     const refreshTimer = setInterval(refresh, 45000)
     return () => { controller.abort(); clearTimeout(first); clearInterval(repeat); clearInterval(refreshTimer) }
-  }, [enabled, moment, question, release])
+  }, [enabled, release])
 
   return (
     <>
       <div className="petal-rain" aria-label="Falling thoughts" aria-hidden={!enabled} inert={!enabled}>
-        {petals.active.map(petal => <Petal key={petal.id} petal={petal} onLand={remove} onRead={setSelected} />)}
+        {flowers.map(flower => {
+          const zone = zones[flower.id]
+          if (!zone) return null
+          return (
+            <div className="petal-zone" key={flower.id} data-petal-zone={flower.id} aria-label={`${flower.name} thoughts`} style={{ left: zone.left, width: zone.width, height: zone.height, '--landing': `${Math.max(0, zone.height - 44)}px` }}>
+              {petals.active.filter(petal => petal.response.moment.startsWith(`${flower.id}:`)).map(petal => <Petal key={petal.id} petal={petal} onLand={remove} onRead={setSelected} />)}
+            </div>
+          )
+        })}
       </div>
       {selected && <PetalAnswer petal={selected} onClose={() => setSelected(null)} />}
     </>

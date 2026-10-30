@@ -453,3 +453,19 @@ cite { margin-top: .5rem; font-size: .85rem; }
 .plant-art { flex: 1; min-height: 0; height: auto; max-height: min(28svh, 18rem); }
 @media (max-width: 600px) { .plant-art { max-height: 20svh; } }
 @media (max-height: 500px) and (min-width: 601px) { .plant-art { max-height: 18svh; } }
+
+/* Clip the entire flight to its own planting column, including horizontal drift. */
+.petal-zone { position: absolute; top: 0; overflow: hidden; pointer-events: none; }
+@keyframes petal-fall {
+  0% { opacity: 0; transform: translate3d(0, -3rem, 0) rotate(0deg); }
+  6% { opacity: .9; }
+  30% { transform: translate3d(calc(var(--drift) * -.35), calc(var(--landing) * .28), 0) rotate(calc(var(--turn) * .3)); }
+  65% { opacity: .9; transform: translate3d(calc(var(--drift) * .7), calc(var(--landing) * .65), 0) rotate(calc(var(--turn) * .7)); }
+  98% { opacity: .8; }
+  100% { opacity: 0; transform: translate3d(var(--drift), var(--landing), 0) rotate(var(--turn)); }
+}
+
+.quotation-flower { color: inherit; padding: .02em .14em; border-radius: .12em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.quotation-flower--lilac { color: inherit; background: #e7dcf2; }
+.quotation-flower--carnations { color: inherit; background: #f2d6d3; }
+.quotation-flower--roses { color: inherit; background: #efd4e1; }

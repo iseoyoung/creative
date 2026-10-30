@@ -9,7 +9,6 @@ import PetalRain from './components/PetalRain.jsx'
 export default function App() {
   const [entered, setEntered] = useState(false)
   const [selectedFlower, setSelectedFlower] = useState(null)
-  const [activeMoment, setActiveMoment] = useState(null)
   const gardenScene = useRef(null)
   const activeFlower = flowers.find(flower => flower.id === selectedFlower)
 
@@ -42,10 +41,10 @@ export default function App() {
           ))}
         </div>
         <div className="reading-space">
-          {activeFlower && <FlowerReading key={activeFlower.id} flower={activeFlower} onMomentChange={setActiveMoment} />}
+          {activeFlower && <FlowerReading key={activeFlower.id} flower={activeFlower} />}
         </div>
       </section>
-      <PetalRain enabled={entered} moment={activeMoment?.key} question={activeMoment?.question} />
+      <PetalRain enabled={entered} />
       <section
         className={`title-screen${entered ? ' title-screen--dismissed' : ''}`}
         aria-labelledby="title-heading"
