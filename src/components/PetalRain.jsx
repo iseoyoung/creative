@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useReducer, useRef, useState } from 'react'
 import { listResponses } from '../data/responses.js'
 import { initialPetals, petalReducer } from '../data/petals.js'
-import { flowers } from '../data/flowers.js'
+import { flowers, readingQuestions } from '../data/flowers.js'
 import { MAX_RESPONSES } from '../../shared/responses.js'
 
 function PetalAnswer({ petal, onClose }) {
@@ -107,7 +107,7 @@ export default function PetalRain({ enabled }) {
     if (!enabled) return
     const controller = new AbortController()
     async function refresh() {
-      await Promise.allSettled(flowers.flatMap(flower => flower.moments.map(async moment => {
+      await Promise.allSettled(flowers.flatMap(flower => flower.moments.flatMap(readingQuestions).map(async moment => {
         const key = `${flower.id}:${moment.id}`
         const previous = new Set([...cache.current].filter(([, saved]) => saved.response.moment === key).map(([id]) => id))
         const collected = new Map()

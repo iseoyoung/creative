@@ -35,7 +35,7 @@ export default function App() {
         inert={!entered}
         style={{ backgroundImage: `url("${gardenImage}")` }}
       >
-        <div className="planting-areas" aria-label="Three planting areas">
+        <div className={`planting-areas${selectedFlower ? ' planting-areas--selected' : ''}`} aria-label="Three planting areas">
           {flowers.map(flower => (
             <PlantingArea key={flower.id} flower={flower} active={flower.id === selectedFlower} onBloom={handleBloom} onRead={handleRead} />
           ))}

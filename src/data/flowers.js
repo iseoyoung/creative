@@ -20,9 +20,9 @@ export const flowers = [
     ],
     moments: [{
       id: 'comfort', title: 'Emotional comfort',
-      excerpt: 'nodding tufts of lilac with her eyes half closed',
+      excerpt: "among the irises and roses and nodding tufts of lilac with her eyes half closed, snuffing in, after the street uproar, the delicious scent, the exquisite coolness.",
       sentence: "Ah yes—so she breathed in the earthy-garden sweet smell as she stood talking to Miss Pym who owed her help, and thought her kind, for kind she had been years ago; very kind, but she looked older, this year, turning her head from side to side among the irises and roses and nodding tufts of lilac with her eyes half closed, snuffing in, after the street uproar, the delicious scent, the exquisite coolness.",
-      context: "Clarissa enters a flower shop after being disturbed by thoughts of Miss Kilman, her daughter's teacher. As she breathes in the scent of the flowers, the beauty and calm of the shop briefly ease her anger.",
+      context: "Earlier that morning, Clarissa has been troubled by her resentment toward Miss Kilman, her daughter Elizabeth's teacher. She feels uncomfortable with the intensity of her own hatred.\n\nWhen Clarissa enters Mulberry's flower shop, she talks with Miss Pym and becomes absorbed in the fragrance and beauty of the flowers. The peaceful atmosphere contrasts with the noisy London streets.\n\nAs she continues choosing flowers, their beauty and Miss Pym's kindness gradually ease her anger. Although the flowers cannot resolve her conflict with Miss Kilman, they provide a temporary sense of emotional comfort.",
       question: 'Can beauty comfort us even when our problems remain unresolved?',
     }],
   },
@@ -37,15 +37,11 @@ export const flowers = [
     ],
     moments: [
       {
-        id: 'composure', title: 'Composed appearance',
-        excerpt: 'dark and prim the red carnations, holding their heads up', sentence: "And then, opening her eyes, how fresh, like frilled linen clean from a laundry laid in wicker trays, the roses looked; and dark and prim the red carnations, holding their heads up; and all the sweet peas spreading in their bowls, tinged violet, snow white, pale—as if it were the evening and girls in muslin frocks came out to pick sweet peas and roses after the superb summer’s day, with its almost blue-black sky, its delphiniums, its carnations, its arum lilies, was over; and it was the moment between six and seven when every flower—roses, carnations, irises, lilac—glows; white, violet, red, deep orange; every flower seems to burn by itself, softly, purely in the misty beds; and how she loved the grey white moths spinning in and out, over the cherry pie, over the evening primroses!",
-        context: "In the flower shop, Clarissa looks at the red carnations. Woolf describes the flowers as upright and 'prim,' giving them an almost human air of formality and composure.",
-        question: 'How much of ourselves do we hide behind a composed appearance?',
-      },
-      {
         id: 'gift', title: "Hugh’s gift",
-        excerpt: 'without bringing her in his outstretched hand a bunch of carnations', sentence: "A magnificent figure he cut too, pausing for a moment (as the sound of the half-hour died away) to look critically, magisterially, at socks and shoes; impeccable, substantial, as if he beheld the world from a certain eminence, and dressed to match; but realised the obligations which size, wealth, health, entail, and observed punctiliously even when not absolutely necessary, little courtesies, old-fashioned ceremonies which gave a quality to his manner, something to imitate, something to remember him by, for he would never lunch, for example, with Lady Bruton, whom he had known these twenty years, without bringing her in his outstretched hand a bunch of carnations and asking Miss Brush, Lady Bruton’s secretary, after her brother in South Africa, which, for some reason, Miss Brush, deficient though she was in every attribute of female charm, so much resented that she said “Thank you, he’s doing very well in South Africa,” when, for half a dozen years, he had been doing badly in Portsmouth.",
-        context: "Hugh Whitbread habitually brings carnations when he lunches with Lady Bruton. He also asks Lady Bruton's secretary, Miss Brush, about her brother, but she resents his manner. The scene complicates the appearance of polished social courtesy.",
+        excerpt: "he would never lunch, for example, with Lady Bruton, whom he had known these twenty years, without bringing her in his outstretched hand a bunch of carnations",
+        sentence: "for he would never lunch, for example, with Lady Bruton, whom he had known these twenty years, without bringing her in his outstretched hand a bunch of carnations and asking Miss Brush, Lady Bruton’s secretary, after her brother in South Africa, which, for some reason, Miss Brush, deficient though she was in every attribute of female charm, so much resented that she said “Thank you, he’s doing very well in South Africa,” when, for half a dozen years, he had been doing badly in Portsmouth.",
+        context: "Hugh Whitbread visits Lady Bruton for lunch, bringing her carnations as he habitually does. Hugh is a well-dressed, socially confident gentleman who takes pride in observing traditional manners and courtesies.\n\nHe also routinely asks Lady Bruton's secretary, Miss Brush, about her brother in South Africa. However, her brother has actually been struggling in Portsmouth for years, and Miss Brush resents Hugh's familiar manner and repeated questions.\n\nLady Bruton appreciates Hugh's supposed kindness, although she cannot remember a specific example of it. She privately prefers Richard Dalloway, whom she considers a finer person.\n\nThe scene creates a contrast between Hugh's outward politeness and how others experience his behavior. His carnations represent a socially appropriate gesture, but the surrounding interactions invite readers to question whether good manners necessarily reflect genuine consideration.",
+        extraQuestions: [{ id: 'composure', question: "How much of ourselves do we hide behind a composed appearance?" }],
         question: 'Does a kind gesture always come from kindness?',
       },
     ],
@@ -68,11 +64,15 @@ export const flowers = [
         question: 'Can love be understood without being spoken?',
       },
       {
-        id: 'realities', title: 'Different realities', excerpt: 'But they were almost dead already…',
-        sentence: 'But they were almost dead already, she said, arranging the roses.',
-        context: 'Rezia returns with roses and places them in a vase. Septimus has just been hearing the voice of his dead friend Evans. When Rezia says the roses are nearly dead, Septimus imagines that Evans picked them in Greece. The same flowers belong to very different experiences for the couple.',
+        id: 'realities', title: 'Different realities', excerpt: "But they were almost dead already, she said, arranging the roses.",
+        sentence: "And Rezia came in, with her flowers, and walked across the room, and put the roses in a vase, upon which the sun struck directly, and it went laughing, leaping round the room.\n\nShe had had to buy the roses, Rezia said, from a poor man in the street. But they were almost dead already, she said, arranging the roses.\n\nSo there was a man outside; Evans presumably; and the roses, which Rezia said were half dead, had been picked by him in the fields of Greece. “Communication is health; communication is happiness, communication—” he muttered.",
+        context: "Rezia returns home with roses she bought from a street seller. To her, they are ordinary flowers, already beginning to die. But Septimus, who is experiencing visions of his dead friend Evans, imagines that Evans picked the same roses in the fields of Greece.\n\nAlthough Rezia and Septimus share the same room and see the same flowers, they experience entirely different realities. Rezia becomes increasingly frightened because she cannot understand what Septimus is experiencing.\n\nThe scene reveals how two people can be physically close yet emotionally and psychologically separated, even when they are looking at the same thing.",
         question: 'How can we understand someone whose experience of reality is different from our own?',
       },
     ],
   },
 ]
+
+export function readingQuestions(moment) {
+  return [{ id: moment.id, question: moment.question }, ...(moment.extraQuestions || [])]
+}

@@ -68,7 +68,7 @@ export default function PlantingArea({ flower, onBloom, onRead, active }) {
 
   return (
     <section className={`planting-area${stage === 4 ? ' planting-area--bloomed' : ''}${active ? ' planting-area--active' : ''}`} aria-label={flower.name} data-stage={stage} data-flower={flower.id}>
-      <button className="plant-button" onClick={handleClick} disabled={(!ready && !failed) || growing} aria-label={label}>
+      <button className="plant-button" onClick={handleClick} disabled={(!ready && !failed) || growing} aria-label={label} aria-pressed={stage === 4 ? active : undefined}>
         <span className="plant-art" aria-hidden="true">
           {stage < 0 ? <span className="plant-marker">+</span> : (
             <span className="flower-sway">
