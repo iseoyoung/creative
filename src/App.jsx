@@ -6,26 +6,23 @@ const flowers = ['Lilac', 'Carnations', 'Roses']
 
 export default function App() {
   const [entered, setEntered] = useState(false)
-  const gardenHeading = useRef(null)
+  const gardenScene = useRef(null)
 
   useEffect(() => {
-    if (entered) gardenHeading.current?.focus({ preventScroll: true })
+    if (entered) gardenScene.current?.focus({ preventScroll: true })
   }, [entered])
 
   return (
     <main className="experience">
       <section
-        className={`garden${entered ? ' garden--entered' : ''}`}
-        aria-labelledby="garden-heading"
+        className="garden"
+        aria-label="Literary Garden"
+        ref={gardenScene}
+        tabIndex={-1}
         aria-hidden={!entered}
         inert={!entered}
         style={{ backgroundImage: `url("${gardenImage}")` }}
       >
-        <header className="garden__intro">
-          <p className="eyebrow">A space for stories to grow</p>
-          <h1 id="garden-heading" ref={gardenHeading} tabIndex={-1}>Literary Garden</h1>
-          <p>Every flower holds a story.</p>
-        </header>
         <div className="planting-areas" aria-label="Three planting areas">
           {flowers.map((flower, index) => (
             <section className="planting-area" key={flower} aria-labelledby={`flower-${index}`}>
