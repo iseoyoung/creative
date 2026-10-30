@@ -547,3 +547,11 @@ cite { margin-top: .5rem; font-size: .85rem; }
 .petal-note-label { font-weight: 600; }
 .petal-note-answer { font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 600; line-height: 1.45; }
 .petal-note-answer p { white-space: pre-wrap; overflow-wrap: anywhere; }
+
+/* Notes read as a question followed by its answer. */
+.petal-note-question, .petal-note-answer { display: block; }
+.petal-note-delete { align-self: flex-end; margin-top: 1rem; padding: .35rem .7rem; border: 1px solid #a58d80; border-radius: .25rem; background: transparent; color: #705148; font: inherit; cursor: pointer; }
+.petal-note-delete:hover { background: #f0e3db; }
+
+/* Reserve scrollbar width before expansion so quotation sizing stays identical. */
+.quotation-scroll { scrollbar-gutter: stable; }

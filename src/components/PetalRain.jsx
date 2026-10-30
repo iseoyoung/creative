@@ -4,7 +4,7 @@ import { initialPetals, petalReducer } from '../data/petals.js'
 import { flowers, readingQuestions } from '../data/flowers.js'
 import { MAX_RESPONSES } from '../../shared/responses.js'
 
-function PetalAnswer({ petal, onClose }) {
+function PetalAnswer({ petal, onClose, onDelete }) {
   const dialog = useRef(null)
   useEffect(() => {
     const element = dialog.current
@@ -15,10 +15,11 @@ function PetalAnswer({ petal, onClose }) {
   return (
     <dialog className="response-queue petal-answer" ref={dialog} aria-label="Reader response" onClose={() => { if (!dialog.current?.open) onClose() }}>
       <button className="icon-button petal-note-close" aria-label="Close petal answer" onClick={() => dialog.current.close()} autoFocus>×</button>
-      <div className="petal-note-question"><span className="petal-note-label">Q |</span><p>{petal.question}</p></div>
+      <div className="petal-note-question"><p>{petal.question}</p></div>
       <div className="response-queue__body">
-        <div className="petal-note-answer"><span className="petal-note-label">A |</span><p>{petal.response.answer}</p></div>
+        <div className="petal-note-answer"><p>{petal.response.answer}</p></div>
       </div>
+      <button className="petal-note-delete" onClick={() => onDelete(petal)} title="Remove this note on this device">Delete note</button>
     </dialog>
   )
 }
@@ -45,6 +46,19 @@ export default function PetalRain({ enabled }) {
   const [petals, dispatch] = useReducer(petalReducer, initialPetals)
   const [selected, setSelected] = useState(null)
   const cache = useRef(new Map())
+  const deleted = useRef(null)
+  if (deleted.current === null) {
+    try {
+      const saved = JSON.parse(localStorage.getItem('literary-garden:deleted-notes:v1') || '[]')
+      deleted.current = new Set(Array.isArray(saved) ? saved.filter(id => typeof id === 'string') : [])
+    } catch { deleted.current = new Set() }
+  }
+  function deleteNote(petal) {
+    deleted.current.add(`${petal.mode}:${petal.response.id}`)
+    try { localStorage.setItem('literary-garden:deleted-notes:v1', JSON.stringify([...deleted.current])) } catch { /* Keep deletion for this visit if storage is unavailable. */ }
+    dispatch({ type: 'delete', id: petal.id })
+    setSelected(null)
+  }
   const [zones, setZones] = useState({})
   const reducedMotion = useRef(false)
   const counter = useRef(0)
@@ -54,7 +68,7 @@ export default function PetalRain({ enabled }) {
   const remove = useCallback(id => dispatch({ type: 'land', id }), [])
 
   const release = useCallback((response, mode, prompt, delay = 0) => {
-    if (!active.current) return
+    if (!active.current || deleted.current.has(`${mode}:${response.id}`)) return
     const duration = 22000 + Math.round(Math.random() * 8000)
     const petal = {
       id: ++counter.current, response, mode, question: prompt,
@@ -149,7 +163,7 @@ export default function PetalRain({ enabled }) {
           )
         })}
       </div>
-      {selected && <PetalAnswer petal={selected} onClose={() => setSelected(null)} />}
+      {selected && <PetalAnswer petal={selected} onClose={() => setSelected(null)} onDelete={deleteNote} />}
     </>
   )
 }

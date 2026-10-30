@@ -54,3 +54,5 @@ Shared answers are anonymous and visible to readers. Each passage retains its la
 - `api/responses.js`, `server/redis.js`: serverless response API and Upstash adapter
 - `shared/responses.js`: shared input rules
 - `tests/`: server and adapter tests
+
+Petal notes display the question above the answer. “Delete note” dismisses that petal on the current device and persists its hidden ID in browser storage; it does not delete shared responses from Redis or the response queue. Expanded quotations keep the short quotation’s fitted font size and scroll within their panel.

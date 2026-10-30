@@ -23,3 +23,11 @@ test('flower-specific answers remain distinct when they pile up', () => {
   assert.equal(state.active[1].landed, true)
   assert.equal(state.active[0].landed, undefined)
 })
+
+test('deleting one note removes only its petal from the ground', () => {
+  let state = initialPetals
+  for (const item of [petal(1), petal(2), petal(3, 'roses:love')]) state = petalReducer(state, { type: 'release', petal: item })
+  state = petalReducer(state, { type: 'land', id: 2 })
+  state = petalReducer(state, { type: 'delete', id: 2 })
+  assert.deepEqual(state.active.map(item => item.id), [1, 3])
+})

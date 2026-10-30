@@ -6,6 +6,9 @@ export function petalReducer(state, action) {
     const duplicate = state.active.some(petal => petal.mode === incoming.mode && petal.response.id === incoming.response.id)
     return duplicate ? state : { ...state, active: [...state.active, incoming] }
   }
+  if (action.type === 'delete') {
+    return { ...state, active: state.active.filter(petal => petal.id !== action.id) }
+  }
   if (action.type === 'land') {
     if (!state.active.some(petal => petal.id === action.id && !petal.landed)) return state
     return { ...state, active: state.active.map(petal => petal.id === action.id ? { ...petal, landed: true } : petal) }
