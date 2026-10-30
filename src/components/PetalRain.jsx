@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useReducer, useRef, useState } from 'react'
 import { listResponses } from '../data/responses.js'
-import FitToSpace from './FitToSpace.jsx'
 import { initialPetals, petalReducer } from '../data/petals.js'
 import { flowers } from '../data/flowers.js'
 import { MAX_RESPONSES } from '../../shared/responses.js'
@@ -21,7 +20,7 @@ function PetalAnswer({ petal, onClose }) {
       </header>
       <p className="response-queue__question">{petal.question}</p>
       <p className="storage-note">{petal.mode === 'device' ? 'An answer saved on this device.' : 'An anonymous answer shared in this garden.'}</p>
-      <div className="response-queue__body"><FitToSpace><blockquote className="queued-answer"><p>{petal.response.answer}</p></blockquote></FitToSpace></div>
+      <div className="response-queue__body"><blockquote className="queued-answer"><p>{petal.response.answer}</p></blockquote></div>
     </dialog>
   )
 }

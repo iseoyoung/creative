@@ -6,11 +6,11 @@ A Vite + React literary garden using the supplied watercolor artwork and locally
 
 Enter the garden and choose Lilac, Carnations, or Roses. Branches extend, leaves unfold, buds appear, and flower clusters open over about 6.7 seconds (twice the previous growth speed). Flower artwork is 1.5× its previous size, anchored at the same root. Bloomed flowers remain visible and gently sway at the original speed. Each plant grows independently.
 
-The illustrated name, complete quotation, editorial context, and reflection question appear in sequence. Carnations and Roses each have two passages. The key excerpt appears first; click it to expand or collapse its full quotation. Only the selected flower’s name is highlighted, using a pale flower-colored background (lilac lavender, carnation coral, rose pink). Other flower names in the same sentence remain plain; verified edition details are in [quotation sources](docs/quotation-sources.md).
+The illustrated name, complete quotation, editorial context, and reflection question appear in sequence. Carnations and Roses each have two passages. The full quotation is shown immediately, with no expand button. Long quotations and contexts scroll independently inside their own panels. Only the selected flower’s name is highlighted, using a pale flower-colored background (lilac lavender, carnation coral, rose pink). Other flower names in the same sentence remain plain; verified edition details are in [quotation sources](docs/quotation-sources.md).
 
 Write a thought in the transparent input and use Send. Queue shows saved responses for that passage, one at a time. Every saved answer corresponds to one persistent petal, confined to its own flower’s planting column. Both passages are included for Carnations and Roses, and all response pages are loaded. New submissions appear immediately without duplicating a currently falling answer. Submitted thoughts become slow falling petals; select one to read its answer. Petals settle into small overlapping piles on the ground of their own flower area and remain clickable for the current visit. Refreshes add new saved answers without duplicating petals already falling or on the ground. On a new visit, saved answers fall again. Reduced-motion preferences disable swaying and automatic petal rain; a submitted answer appears as a stationary petal and then settles into the persistent ground pile.
 
-The reading, reflection controls, and three planting areas share one viewport without vertical page scrolling. Long prose scales to fit the available space; input and Send/Queue controls keep their normal size. Small screens necessarily render long original sentences at a smaller size. Long drafts can scroll inside the input. Drafts are retained separately for each question on the current device.
+The reading, reflection controls, and three planting areas share one viewport without vertical page scrolling. Text keeps its normal font size; long quotations, contexts, Queue answers, and petal answers scroll inside their own bounded areas. The page itself does not scroll. Long drafts can scroll inside the input. Drafts are retained separately for each question on the current device.
 
 ## Development and validation
 
@@ -47,7 +47,6 @@ Shared answers are anonymous and visible to readers. Each passage retains its la
 - `src/components/FlowerReading.jsx`, `FlowerQuote.jsx`: full quotations and flower-name colors
 - `src/components/Reflection.jsx`, `ResponseQueue.jsx`: writing and reading answers
 - `src/components/PetalRain.jsx`: submitted and replayed answer petals
-- `src/components/FitToSpace.jsx`: adaptive prose fitting
 - `src/data/flowers.js`: five scenes, questions, and original artwork coordinates
 - `src/data/growth.js`, `organPaths.js`: growth timing and vector clipping metadata
 - `src/data/responses.js`: browser storage and API client

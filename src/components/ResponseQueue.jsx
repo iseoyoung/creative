@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { RESPONSE_PAGE_SIZE } from '../../shared/responses.js'
 import { listResponses } from '../data/responses.js'
-import FitToSpace from './FitToSpace.jsx'
 
 export default function ResponseQueue({ moment, question, onClose }) {
   const dialog = useRef(null)
@@ -47,12 +46,10 @@ export default function ResponseQueue({ moment, question, onClose }) {
       <p className="response-queue__question">{question}</p>
       <p className="storage-note">{page.mode === 'device' ? 'Only answers saved on this device are shown.' : page.mode === 'shared' ? 'Anonymous thoughts shared in this garden.' : 'Opening the queue…'}</p>
       <div className="response-queue__body" aria-live="polite" aria-busy={loading}>
-        <FitToSpace>
-          {loading ? <p>Gathering thoughts…</p>
+        {loading ? <p>Gathering thoughts…</p>
             : error ? <p className="form-error" role="alert">{error}</p>
               : current ? <blockquote className="queued-answer"><p>{current.answer}</p><cite>{page.mode === 'device' ? 'You · this device' : 'A reader'}</cite></blockquote>
                 : <p>{page.mode === 'device' ? 'Your saved answers will appear here.' : 'No answers yet. You can leave the first thought.'}</p>}
-        </FitToSpace>
       </div>
       <footer className="response-queue__footer">
         <button disabled={loading || (!page.offset && !index)} onClick={() => index ? setIndex(value => value - 1) : load(Math.max(0, page.offset - RESPONSE_PAGE_SIZE), true)} aria-label="Previous response">←</button>

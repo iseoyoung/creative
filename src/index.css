@@ -277,8 +277,6 @@ html, body, #root { height: 100%; overflow: hidden; }
   min-height: 0;
   margin: 0 auto;
 }
-.reading-fit { display: flex; align-items: center; justify-content: center; height: 100%; min-height: 0; }
-.reading-fit__content { width: 100%; flex: none; transform-origin: center; }
 .flower-reading { padding: .5rem 1rem; }
 .flower-reading__name { height: 3rem; margin-bottom: .5rem; }
 .flower-reading__name img { width: min(100%, 12rem); }
@@ -447,7 +445,7 @@ cite { margin-top: .5rem; font-size: .85rem; }
 .quotation-flower--roses { color: #a04568; }
 
 .garden { grid-template-columns: minmax(0, 1fr); }
-.reading-space, .reading-fit, .reading-fit__content, .flower-reading, .reading-literature, .reflection { min-width: 0; }
+.reading-space, .flower-reading, .reading-literature, .reflection { min-width: 0; }
 .planting-area, .plant-button { height: 100%; }
 .plant-button { justify-content: flex-end; }
 .plant-art { flex: 1; min-height: 0; height: auto; max-height: min(28svh, 18rem); }
@@ -486,3 +484,23 @@ cite { margin-top: .5rem; font-size: .85rem; }
 .falling-petal--landed:hover, .falling-petal--landed:focus-visible { z-index: 2; filter: drop-shadow(0 1px 4px rgb(85 53 56 / 30%)); }
 
 .reading-context p + p { margin-top: .65rem; }
+
+/* Keep typography at its normal size; scroll prose inside each bounded panel. */
+.reading-literature { display: flex; flex-direction: column; overflow: hidden; }
+.flower-reading__name, .moment-picker { flex: none; }
+.reading-passage { display: grid; grid-template-rows: minmax(0, 1fr) minmax(0, 1fr); gap: .7rem; flex: 1; min-height: 0; }
+.quotation-section, .quotation-section blockquote { display: flex; flex-direction: column; min-height: 0; }
+.quotation-section blockquote { height: 100%; }
+.quotation-section cite { flex: none; }
+.reading-context { display: flex; flex-direction: column; min-height: 0; margin-top: 0; }
+.reading-context h3 { flex: none; }
+.quotation-scroll, .context-scroll { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; overflow-wrap: anywhere; padding: .1rem .4rem; scrollbar-width: thin; scrollbar-color: #a5a88f transparent; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+.quotation-scroll:focus-visible, .context-scroll:focus-visible { outline: 1px solid #7b856b; outline-offset: -1px; }
+.response-queue__body { overflow-y: auto; overflow-wrap: anywhere; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #a5a88f transparent; }
+@media (max-height: 500px) and (min-width: 601px) {
+  .flower-reading__name { height: 1.8rem; margin-bottom: .2rem; }
+  .moment-picker { margin: .1rem 0 .2rem; }
+  .reading-passage { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); }
+  .reflection { margin-top: .4rem; }
+  .reflection h3 { font-size: .9rem; margin-bottom: .2rem; }
+}
