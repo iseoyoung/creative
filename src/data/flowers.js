@@ -61,9 +61,10 @@ export const flowers = [
     ],
     moments: [
       {
-        id: 'love', title: 'Unspoken love', excerpt: 'Which one never does say…',
-        sentence: 'Which one never does say, he thought.',
-        context: 'Richard Dalloway carries roses to Clarissa, intending to tell her he loves her. He finds it difficult to say those words aloud, even though the flowers express his affection.',
+        id: 'love', title: 'Unspoken love',
+        excerpt: "He was holding out flowers—roses, red and white roses. (But he could not bring himself to say he loved her; not in so many words.)",
+        sentence: "He was holding out flowers—roses, red and white roses. (But he could not bring himself to say he loved her; not in so many words.) But how lovely, she said, taking his flowers. She understood; she understood without his speaking; his Clarissa.",
+        context: "Richard returns home after lunch with Lady Bruton, carrying red and white roses for Clarissa. He wants to tell her that he loves her but cannot express his feelings directly. Clarissa understands the meaning of his flowers, and they begin discussing their day, including Peter Walsh, Lady Bruton, and the upcoming party. Richard still cannot say “I love you,” but he holds Clarissa's hand instead.\n\nThe scene suggests that love can be communicated through gestures rather than words. Yet their ordinary conversation also raises a question about how fully two people can understand each other's feelings, even within a marriage.",
         question: 'Can love be understood without being spoken?',
       },
       {

@@ -43,7 +43,7 @@ export default function FlowerReading({ flower }) {
             </div>
             <div className={`reading-reveal reading-context${reveal >= 2 ? ' reading-reveal--visible' : ''}`} aria-hidden={reveal < 2}>
               <h3>In the story</h3>
-              <p>{moment.context}</p>
+              {moment.context.split('\n\n').map((paragraph, index) => <p key={index}>{paragraph}</p>)}
             </div>
           </div>
         </FitToSpace>

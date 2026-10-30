@@ -484,3 +484,5 @@ cite { margin-top: .5rem; font-size: .85rem; }
   transform: translate3d(var(--drift), calc(var(--landing) - var(--pile-lift)), 0) rotate(var(--turn));
 }
 .falling-petal--landed:hover, .falling-petal--landed:focus-visible { z-index: 2; filter: drop-shadow(0 1px 4px rgb(85 53 56 / 30%)); }
+
+.reading-context p + p { margin-top: .65rem; }

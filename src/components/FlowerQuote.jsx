@@ -18,7 +18,7 @@ export default function FlowerQuote({ sentence, excerpt, flowerId }) {
       <span id={textId}>“{parts.map((part, index) => index % 2
         ? <span className={`quotation-flower quotation-flower--${flowerId}`} key={index}>{part}</span>
         : part)}”</span>
-      <span className="quotation__hint">{expanded ? 'Close full sentence −' : 'Read full sentence +'}</span>
+      <span className="quotation__hint">{expanded ? 'Close full quotation −' : 'Read full quotation +'}</span>
     </button>
   )
 }
