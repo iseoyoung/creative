@@ -513,8 +513,37 @@ cite { margin-top: .5rem; font-size: .85rem; }
 
 /* Keep the selected bloom visually connected to its reading. */
 .flower-sway { transition: filter .8s ease, opacity .8s ease; }
-.planting-areas--selected .planting-area--active .flower-sway { filter: brightness(1.07) saturate(1.04); opacity: 1; }
-.planting-areas--selected .planting-area:not(.planting-area--active) .flower-sway { filter: brightness(.88) saturate(.7); opacity: .5; }
+.planting-areas--selected .planting-area--active .flower-sway { filter: brightness(1.1) saturate(1.08) drop-shadow(0 0 8px rgb(255 244 206 / 55%)); opacity: 1; }
+.planting-areas--selected .planting-area:not(.planting-area--active) .flower-sway { filter: none; opacity: 1; }
 
 .quotation-meta { display: flex; flex: none; justify-content: center; align-items: center; gap: .75rem; margin-top: .3rem; }
 .quotation-meta .quotation-expand, .quotation-meta cite { margin-top: 0; }
+
+.quotation-scroll--short { overflow-y: hidden; }
+.title-screen__content { width: min(100%, 70rem); }
+.title-screen h1.drawn-title { width: 100%; margin: 1.5rem auto; line-height: 1; }
+.drawn-title svg { display: block; width: 100%; height: auto; overflow: visible; }
+.drawn-title__letter {
+  fill: currentColor;
+  fill-opacity: 1;
+  stroke: currentColor;
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  animation: draw-title-ink 1.3s ease var(--letter-delay) both, fill-title-ink .8s ease calc(var(--letter-delay) + .8s) both;
+}
+@keyframes draw-title-ink { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes fill-title-ink { from { fill-opacity: 0; } to { fill-opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .drawn-title__letter { animation: none; stroke-dashoffset: 0; fill-opacity: 1; }
+}
+
+.petal-answer { padding-top: 3.5rem; }
+.petal-note-close { position: absolute; top: .4rem; right: .4rem; font-size: 1.6rem; }
+.petal-note-question, .petal-note-answer { display: grid; grid-template-columns: 2rem minmax(0, 1fr); gap: .6rem; text-align: left; }
+.petal-note-question { font-size: 1.05rem; line-height: 1.5; flex: none; }
+.petal-note-label { font-weight: 600; }
+.petal-note-answer { font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 600; line-height: 1.45; }
+.petal-note-answer p { white-space: pre-wrap; overflow-wrap: anywhere; }

@@ -48,12 +48,11 @@ export default function FlowerReading({ flower }) {
         <div key={moment.id} className="reading-passage">
           <div className={`quotation-section reading-reveal${reveal >= 1 ? ' reading-reveal--visible' : ''}`} aria-hidden={reveal < 1}>
             <blockquote>
-              <div className="quotation-scroll" id={`quotation-${flower.id}-${moment.id}`} ref={quotationScroll} role="region" aria-label={expanded ? 'Expanded quotation' : 'Short quotation'} tabIndex={reveal >= 1 ? 0 : -1}>
-                <FlowerQuote text={expanded ? moment.sentence : moment.excerpt} flowerId={flower.id} />
+              <div className={`quotation-scroll${expanded ? '' : ' quotation-scroll--short'}`} id={`quotation-${flower.id}-${moment.id}`} ref={quotationScroll} role="region" aria-label={expanded ? 'Expanded quotation' : 'Short quotation'} tabIndex={reveal >= 1 ? 0 : -1}>
+                <FlowerQuote text={expanded ? moment.sentence : moment.excerpt} flowerId={flower.id} fitToPanel={!expanded} />
               </div>
               <div className="quotation-meta">
                 <button className="quotation-expand" aria-expanded={expanded} aria-controls={`quotation-${flower.id}-${moment.id}`} onClick={toggleQuotation} disabled={reveal < 1}>{expanded ? 'Collapse −' : 'Expand +'}</button>
-                <cite>Virginia Woolf · <span>Mrs. Dalloway</span></cite>
               </div>
             </blockquote>
           </div>

@@ -13,14 +13,12 @@ function PetalAnswer({ petal, onClose }) {
   }, [])
   // Ignore a delayed close event from Strict Mode's cleanup if already reopened.
   return (
-    <dialog className="response-queue petal-answer" ref={dialog} aria-labelledby="petal-title" onClose={() => { if (!dialog.current?.open) onClose() }}>
-      <header className="response-queue__header">
-        <h2 id="petal-title">A passing thought</h2>
-        <button className="icon-button" aria-label="Close petal answer" onClick={() => dialog.current.close()} autoFocus>×</button>
-      </header>
-      <p className="response-queue__question">{petal.question}</p>
-      <p className="storage-note">{petal.mode === 'device' ? 'An answer saved on this device.' : 'An anonymous answer shared in this garden.'}</p>
-      <div className="response-queue__body"><blockquote className="queued-answer"><p>{petal.response.answer}</p></blockquote></div>
+    <dialog className="response-queue petal-answer" ref={dialog} aria-label="Reader response" onClose={() => { if (!dialog.current?.open) onClose() }}>
+      <button className="icon-button petal-note-close" aria-label="Close petal answer" onClick={() => dialog.current.close()} autoFocus>×</button>
+      <div className="petal-note-question"><span className="petal-note-label">Q |</span><p>{petal.question}</p></div>
+      <div className="response-queue__body">
+        <div className="petal-note-answer"><span className="petal-note-label">A |</span><p>{petal.response.answer}</p></div>
+      </div>
     </dialog>
   )
 }

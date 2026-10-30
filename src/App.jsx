@@ -5,6 +5,7 @@ import { flowers } from './data/flowers.js'
 import PlantingArea from './components/PlantingArea.jsx'
 import FlowerReading from './components/FlowerReading.jsx'
 import PetalRain from './components/PetalRain.jsx'
+import DrawnTitle from './components/DrawnTitle.jsx'
 
 export default function App() {
   const [entered, setEntered] = useState(false)
@@ -54,7 +55,7 @@ export default function App() {
       >
         <div className="title-screen__content">
           <p className="eyebrow">Words take root here</p>
-          <h1 id="title-heading">Literary<br /><em>Garden</em></h1>
+          <DrawnTitle />
           <p className="title-screen__description">A space for stories to grow.</p>
           <button className="enter-button" onClick={() => setEntered(true)}>
             Enter the garden <span aria-hidden="true">↗</span>
