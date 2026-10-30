@@ -4,11 +4,12 @@ import gardenImage from './background.png'
 import { flowers } from './data/flowers.js'
 import PlantingArea from './components/PlantingArea.jsx'
 import FlowerReading from './components/FlowerReading.jsx'
-import FitToSpace from './components/FitToSpace.jsx'
+import PetalRain from './components/PetalRain.jsx'
 
 export default function App() {
   const [entered, setEntered] = useState(false)
   const [selectedFlower, setSelectedFlower] = useState(null)
+  const [activeMoment, setActiveMoment] = useState(null)
   const gardenScene = useRef(null)
   const activeFlower = flowers.find(flower => flower.id === selectedFlower)
 
@@ -40,12 +41,11 @@ export default function App() {
             <PlantingArea key={flower.id} flower={flower} active={flower.id === selectedFlower} onBloom={handleBloom} onRead={handleRead} />
           ))}
         </div>
-        <div className="reading-space" aria-live="polite" aria-atomic="true">
-          <FitToSpace>
-            {activeFlower && <FlowerReading key={activeFlower.id} flower={activeFlower} />}
-          </FitToSpace>
+        <div className="reading-space">
+          {activeFlower && <FlowerReading key={activeFlower.id} flower={activeFlower} onMomentChange={setActiveMoment} />}
         </div>
       </section>
+      <PetalRain enabled={entered} moment={activeMoment?.key} question={activeMoment?.question} />
       <section
         className={`title-screen${entered ? ' title-screen--dismissed' : ''}`}
         aria-labelledby="title-heading"

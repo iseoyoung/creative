@@ -313,3 +313,143 @@ cite { margin-top: .5rem; font-size: .85rem; }
   .title-screen__description { margin-top: .75rem; }
   .enter-button { margin-top: 1rem; }
 }
+
+.reflection { margin-top: 1rem; text-align: left; }
+.reflection h3 { margin: 0 0 .5rem; font-size: 1.1rem; line-height: 1.35; font-weight: 450; }
+.reflection-form { display: flex; align-items: end; gap: .5rem; border-bottom: 1px solid rgb(61 71 56 / 45%); }
+.reflection-form textarea {
+  display: block;
+  flex: 1;
+  min-width: 0;
+  min-height: 2.5rem;
+  padding: .5rem 0;
+  border: 0;
+  border-radius: 0;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  font-size: 1rem;
+  line-height: 1.4;
+  resize: none;
+  overflow: hidden;
+}
+.reflection-form textarea::placeholder { color: #65705f; opacity: 1; }
+.reflection-form textarea:focus { outline: none; }
+.reflection-form:focus-within { border-bottom-color: #344a31; box-shadow: 0 1px 0 #344a31; }
+.reflection-form textarea[aria-invalid='true'] { color: #842e33; }
+.reflection-actions { display: flex; align-items: center; flex: none; gap: .2rem; }
+.answer-count { align-self: center; font-size: .65rem; color: #65705f; font-variant-numeric: tabular-nums; }
+.answer-count--over, .form-error { color: #842e33; }
+.icon-button {
+  display: inline-grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: .65rem;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+.icon-button svg { width: 100%; height: 100%; }
+.icon-button:disabled { opacity: .35; cursor: default; }
+.icon-button:not(:disabled):hover { background: rgb(61 71 56 / 7%); border-radius: 50%; }
+.storage-note { margin-top: .4rem; font-size: .75rem; line-height: 1.3; color: #57634f; }
+.form-error, .send-status { margin-top: .25rem; font-size: .85rem; line-height: 1.3; }
+.form-error:empty, .send-status:empty { margin: 0; }
+.response-queue {
+  width: min(42rem, calc(100vw - 2rem));
+  height: min(36rem, 86svh);
+  max-width: none;
+  max-height: none;
+  padding: clamp(1rem, 3vw, 2rem);
+  border: 1px solid rgb(92 102 78 / 25%);
+  border-radius: .35rem;
+  color: #3d4738;
+  background: #faf5e9;
+  box-shadow: 0 1rem 5rem rgb(42 47 34 / 15%);
+  overflow: hidden;
+}
+.response-queue[open] { display: flex; flex-direction: column; }
+.response-queue::backdrop { background: rgb(48 53 43 / 30%); backdrop-filter: blur(4px); }
+.response-queue__header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex: none; }
+.response-queue__header h2 { font-size: 1.7rem; font-weight: 400; }
+.response-queue__header .icon-button { font-size: 1.75rem; padding: .15rem; }
+.response-queue__question { margin-top: .7rem; font-size: 1.1rem; line-height: 1.4; }
+.response-queue__body { min-height: 0; flex: 1; padding-block: 1rem; text-align: center; }
+.queued-answer { font-size: 1.4rem; line-height: 1.5; }
+.queued-answer p { white-space: pre-wrap; overflow-wrap: anywhere; }
+.response-queue__footer { display: flex; align-items: center; justify-content: center; gap: 1rem; flex: none; font-size: .95rem; }
+.response-queue__footer button { min-width: 2.75rem; min-height: 2.75rem; padding: .4rem; border: 0; color: inherit; background: transparent; font: inherit; cursor: pointer; }
+.response-queue__footer button:disabled { opacity: .35; cursor: default; }
+.response-queue__footer .queue-refresh { font-size: .85rem; }
+.response-queue button:focus-visible { outline-offset: 2px; }
+/* Reserve room for the question and input without adding a scroll region. */
+.garden { grid-template-rows: minmax(0, 62fr) minmax(0, 38fr); }
+.plant-art { height: min(28svh, 18rem); }
+@media (max-width: 600px) {
+  .garden { grid-template-rows: minmax(0, 70fr) minmax(0, 30fr); }
+  .plant-art { height: 20svh; }
+  .reflection { margin-top: .7rem; }
+  .reflection h3 { font-size: 1rem; }
+  .response-queue__header h2 { font-size: 1.4rem; }
+  .response-queue__footer { gap: .6rem; }
+}
+
+.petal-rain { position: fixed; inset: 0; z-index: 5; pointer-events: none; overflow: hidden; }
+.falling-petal {
+  position: absolute;
+  top: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: .4rem;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  animation: petal-fall var(--fall-time) linear both;
+  filter: drop-shadow(0 2px 3px rgb(85 53 56 / 10%));
+  -webkit-tap-highlight-color: transparent;
+}
+.falling-petal svg { display: block; width: 100%; height: 100%; transform: rotate(-18deg); }
+.petal-shape { fill: #dfb6be; stroke: #c79caa; stroke-width: .4; fill-opacity: .85; }
+.petal-vein { stroke: #bb8e9e; opacity: .5; }
+.falling-petal--lilac .petal-shape { fill: #c4b7d7; stroke: #a997c3; }
+.falling-petal--lilac .petal-vein { stroke: #a08ebf; }
+.falling-petal--carnations .petal-shape { fill: #e4b1ae; stroke: #cc9698; }
+.falling-petal:focus-visible { animation-play-state: paused; outline: 1px solid #53624a; outline-offset: 2px; border-radius: 50%; }
+@keyframes petal-fall {
+  0% { opacity: 0; transform: translate3d(0, -3rem, 0) rotate(0deg); }
+  6% { opacity: .9; }
+  30% { transform: translate3d(calc(var(--drift) * -.35), 24svh, 0) rotate(calc(var(--turn) * .3)); }
+  65% { opacity: .9; transform: translate3d(calc(var(--drift) * .7), 56svh, 0) rotate(calc(var(--turn) * .7)); }
+  98% { opacity: .8; }
+  100% { opacity: 0; transform: translate3d(var(--drift), 87svh, 0) rotate(var(--turn)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .falling-petal { top: auto; bottom: 8%; animation: none; transform: none; }
+}
+
+/* Keep input and Send/Queue controls at a usable size while fitting long prose. */
+.flower-reading { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+.reading-literature { flex: 1; min-height: 0; }
+.reflection-wrap { flex: none; }
+.reflection-form textarea { overflow-y: auto; }
+@keyframes unfold-leaf {
+  0% { opacity: 0; transform: rotate(var(--unfold)) scale(.03, .08); }
+  12% { opacity: 1; }
+  72% { transform: rotate(calc(var(--unfold) * -.08)) scale(.94, 1.015); }
+  100% { opacity: 1; transform: rotate(0deg) scale(1); }
+}
+
+.quotation-flower--lilac { color: #80579a; }
+.quotation-flower--carnations { color: #a84b4f; }
+.quotation-flower--roses { color: #a04568; }
+
+.garden { grid-template-columns: minmax(0, 1fr); }
+.reading-space, .reading-fit, .reading-fit__content, .flower-reading, .reading-literature, .reflection { min-width: 0; }
+.planting-area, .plant-button { height: 100%; }
+.plant-button { justify-content: flex-end; }
+.plant-art { flex: 1; min-height: 0; height: auto; max-height: min(28svh, 18rem); }
+@media (max-width: 600px) { .plant-art { max-height: 20svh; } }
+@media (max-height: 500px) and (min-width: 601px) { .plant-art { max-height: 18svh; } }

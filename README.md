@@ -2,50 +2,55 @@
 
 A Vite + React literary garden using the supplied watercolor artwork and locally bundled Crimson Pro.
 
-## Current interaction
+## Interaction
 
-Enter the garden, then choose Lilac, Carnations, or Roses. Each plant grows independently over about 16 seconds: a continuous stem extends from the root, leaves unfold at their attachment points, buds form, and flower clusters open. The supplied mature artwork stays aligned throughout; the animation no longer crossfades between whole plant frames. Bloomed flowers remain in place and sway gently. Select a bloom to read its illustrated name, quotation, and context, revealed in sequence. Carnations and Roses each have two selectable passages.
+Enter the garden and choose Lilac, Carnations, or Roses. Branches extend, leaves unfold, buds appear, and flower clusters open over about 13.3 seconds (1.2× the previous growth speed). Bloomed flowers remain visible and gently sway. Each plant grows independently.
 
-The reading panel and three planting areas fit a single viewport without vertical page scrolling. Long passages and expanded quotations scale to the available space, including on short mobile screens. Reduced-motion preferences disable fades and swaying and shorten the growth sequence. Planting and passage controls support keyboard use.
+The illustrated name, complete quotation, editorial context, and reflection question appear in sequence. Carnations and Roses each have two passages. Only flower names inside quotations receive flower colors: lilac purple, carnation coral red, and rose pink. All five complete sentences are shown without a click to expand; verified edition details are in [quotation sources](docs/quotation-sources.md).
 
-The five literary moments come from the user-supplied `Mrs_Dalloway_5_Moments_Quotation_Context_Question.txt`. Context and questions are editorial text, distinct from Woolf's quotations. The two rose sentences can be expanded. Full sentences for Lilac and both Carnations passages await the referenced University of Virginia PDF; excerpts are displayed without inventing missing text. Content is maintained in `src/data/flowers.js`.
+Write a thought in the transparent input and use Send. Queue shows saved responses for that passage, one at a time. Submitted thoughts become slow falling petals; select one to read its answer. Petals disappear on landing, and saved responses are replayed periodically. Reduced-motion preferences disable swaying and automatic petal rain; a submitted answer is available as a stationary petal for ten seconds.
 
-Questions are retained as content for Phase 3. Reflection inputs, response storage, the queue, and falling petals are not implemented yet.
+The reading, reflection controls, and three planting areas share one viewport without vertical page scrolling. Long prose scales to fit the available space; input and Send/Queue controls keep their normal size. Small screens necessarily render long original sentences at a smaller size. Long drafts can scroll inside the input. Drafts are retained separately for each question on the current device.
 
-## Requirements
+## Development and validation
 
-Use Node.js 22.12 or newer (Node.js 24 LTS recommended) and npm.
-
-## Development
+Use Node.js 24 LTS (minimum 22.12) and npm.
 
 ```sh
 npm ci
 npm run dev -- --host 0.0.0.0
-```
-
-Vite serves the app on port 5173 by default. No environment variables or external services are required.
-
-## Production build
-
-```sh
+npm test
 npm run build
-npm run preview -- --host 0.0.0.0
 ```
 
-The production output is generated in `dist/` (ignored by Git).
+Vite defaults to port 5173 and includes the same `/api/responses` handler used by Vercel. The build is generated in ignored `dist/`. `npm run preview` serves the static build; it does not run the serverless API.
+
+`npm test` exercises response validation, storage separation, pagination, rate limiting, the Redis adapter, and server error handling using isolated test data. It requires no remote credentials. These tests do not establish a live Upstash connection.
+
+## Shared responses on Vercel
+
+1. In Vercel, open this project's Storage/Marketplace integration and connect an Upstash Redis database to the project.
+2. Ensure the production environment has **both** `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`. The equivalent integration names `KV_REST_API_URL` and `KV_REST_API_TOKEN` are also supported.
+3. Redeploy the latest commit so the serverless API receives the variables.
+4. Send an answer. The UI should say it joined the garden, and Queue should show “Other readers’ thoughts”. Confirm the answer appears from another browser/device.
+
+Enter credentials securely in Vercel, never in chat or source files. They are server-only; do not prefix them with `VITE_`. For local shared-response development, copy `.env.example` to ignored `.env.local`, fill values securely, and restart Vite.
+
+Without a configured database, the site explicitly saves only on the current device. It does not present those answers as other readers' responses. There are no fabricated sample answers. A failed configured database returns an error and preserves the user's draft; it does not silently switch to device storage.
+
+Shared answers are anonymous and visible to readers. Each passage retains its latest 200 answers. The API validates passage identifiers, permits up to 500 Unicode characters per answer, and applies a five-per-minute submission limit per hashed client address. Raw client IP addresses are not stored in answers. A real deployment still requires a connected database and live cross-device verification.
 
 ## Structure
 
-- `index.html`: HTML entry point
-- `src/main.jsx`: React bootstrap
 - `src/App.jsx`: title transition and garden selection
-- `src/components/PlantingArea.jsx`: independent growth, asset loading, and motion preferences
-- `src/components/FlowerGrowth.jsx`: continuous branch drawing, leaf unfolding, buds, and bloom growth
-- `src/components/FlowerReading.jsx`: sequential reading and sentence expansion
-- `src/data/flowers.js`: artwork coordinates and five literary moments
-- `src/data/growth.js`: organ attachment points and growth timing
-- `src/data/organPaths.js`: precomputed leaf and petal clipping outlines
-- `src/index.css`: layout, typography, growth fades, and sway
-- `vite.config.js`: Vite React integration
-
-No automated test suite is configured yet.
+- `src/components/PlantingArea.jsx`, `FlowerGrowth.jsx`: growth and motion preferences
+- `src/components/FlowerReading.jsx`, `FlowerQuote.jsx`: full quotations and flower-name colors
+- `src/components/Reflection.jsx`, `ResponseQueue.jsx`: writing and reading answers
+- `src/components/PetalRain.jsx`: submitted and replayed answer petals
+- `src/components/FitToSpace.jsx`: adaptive prose fitting
+- `src/data/flowers.js`: five scenes, questions, and original artwork coordinates
+- `src/data/growth.js`, `organPaths.js`: growth timing and vector clipping metadata
+- `src/data/responses.js`: browser storage and API client
+- `api/responses.js`, `server/redis.js`: serverless response API and Upstash adapter
+- `shared/responses.js`: shared input rules
+- `tests/`: server and adapter tests
