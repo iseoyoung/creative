@@ -31,7 +31,6 @@ export default function App() {
             </section>
           ))}
         </div>
-        <p className="garden__note">A quiet place to pause, read, and reflect.</p>
       </section>
       <section
         className={`title-screen${entered ? ' title-screen--dismissed' : ''}`}
