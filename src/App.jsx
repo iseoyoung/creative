@@ -1,12 +1,30 @@
 import { useEffect, useRef, useState } from 'react'
 import titleImage from './title.png'
 import gardenImage from './background.png'
-
-const flowers = ['Lilac', 'Carnations', 'Roses']
+import { flowers } from './data/flowers.js'
+import PlantingArea from './components/PlantingArea.jsx'
+import FlowerReading from './components/FlowerReading.jsx'
 
 export default function App() {
   const [entered, setEntered] = useState(false)
+  const [selectedFlower, setSelectedFlower] = useState(null)
   const gardenScene = useRef(null)
+  const readingSpace = useRef(null)
+  const activeFlower = flowers.find(flower => flower.id === selectedFlower)
+
+  function handleBloom(id) {
+    setSelectedFlower(current => current ?? id)
+  }
+
+  function handleRead(id) {
+    setSelectedFlower(id)
+    requestAnimationFrame(() => {
+      readingSpace.current?.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        block: 'start',
+      })
+    })
+  }
 
   useEffect(() => {
     if (entered) gardenScene.current?.focus({ preventScroll: true })
@@ -24,12 +42,12 @@ export default function App() {
         style={{ backgroundImage: `url("${gardenImage}")` }}
       >
         <div className="planting-areas" aria-label="Three planting areas">
-          {flowers.map((flower, index) => (
-            <section className="planting-area" key={flower} aria-labelledby={`flower-${index}`}>
-              <div className="planting-area__space" aria-hidden="true" />
-              <h2 id={`flower-${index}`}>{flower}</h2>
-            </section>
+          {flowers.map(flower => (
+            <PlantingArea key={flower.id} flower={flower} active={flower.id === selectedFlower} onBloom={handleBloom} onRead={handleRead} />
           ))}
+        </div>
+        <div className="reading-space" ref={readingSpace} aria-live="polite" aria-atomic="true">
+          {activeFlower && <FlowerReading key={activeFlower.id} flower={activeFlower} />}
         </div>
       </section>
       <section
