@@ -1,7 +1,7 @@
 // Organ boundaries and attachment points on the supplied mature illustrations.
 // Each piece keeps its source coordinates: the plant never changes position or
 // proportions when it grows. Source PNGs remain unchanged.
-export const GROWTH_SPEED = 1.2
+export const GROWTH_SPEED = 2.4
 export const GROWTH_DURATION = 16000 / GROWTH_SPEED
 export const STAGE_DURATIONS = [3600, 3800, 3200, 5400].map(duration => duration / GROWTH_SPEED)
 

@@ -4,7 +4,7 @@ A Vite + React literary garden using the supplied watercolor artwork and locally
 
 ## Interaction
 
-Enter the garden and choose Lilac, Carnations, or Roses. Branches extend, leaves unfold, buds appear, and flower clusters open over about 13.3 seconds (1.2× the previous growth speed). Bloomed flowers remain visible and gently sway. Each plant grows independently.
+Enter the garden and choose Lilac, Carnations, or Roses. Branches extend, leaves unfold, buds appear, and flower clusters open over about 6.7 seconds (twice the previous growth speed). Flower artwork is 1.5× its previous size, anchored at the same root. Bloomed flowers remain visible and gently sway at the original speed. Each plant grows independently.
 
 The illustrated name, complete quotation, editorial context, and reflection question appear in sequence. Carnations and Roses each have two passages. The key excerpt appears first; click it to expand or collapse its complete original sentence. Only the selected flower’s name is highlighted, using a pale flower-colored background (lilac lavender, carnation coral, rose pink). Other flower names in the same sentence remain plain; verified edition details are in [quotation sources](docs/quotation-sources.md).
 

@@ -469,3 +469,9 @@ cite { margin-top: .5rem; font-size: .85rem; }
 .quotation-flower--lilac { color: inherit; background: #e7dcf2; }
 .quotation-flower--carnations { color: inherit; background: #f2d6d3; }
 .quotation-flower--roses { color: inherit; background: #efd4e1; }
+
+/* Enlarge the artwork around its rooted base; sway stays on its own wrapper. */
+.flower-growth { transform: scale(1.5); transform-origin: 50% 95%; }
+.garden { grid-template-rows: minmax(0, 47fr) minmax(0, 53fr); }
+@media (max-width: 600px) { .garden { grid-template-rows: minmax(0, 58fr) minmax(0, 42fr); } }
+@media (max-height: 500px) and (min-width: 601px) { .garden { grid-template-rows: minmax(0, 60fr) minmax(0, 40fr); } }
